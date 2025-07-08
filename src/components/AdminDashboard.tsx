@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+
+interface AdminDashboardProps {
+  onSectionChange?: (section: string) => void;
+}
 import {
   MessageCircle,
   UserPlus,
@@ -19,7 +23,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { getDashboardStats } from "../utils/storage";
 import { DashboardStats } from "../types/admin";
 
-const AdminDashboard: React.FC = () => {
+const AdminDashboard: React.FC<AdminDashboardProps> = ({ onSectionChange }) => {
   const { auth } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [timeFilter, setTimeFilter] = useState("today");
@@ -247,7 +251,10 @@ const AdminDashboard: React.FC = () => {
           </h3>
 
           <div className="space-y-4">
-            <button className="w-full p-4 text-left bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors duration-300 group">
+            <button
+              onClick={() => onSectionChange?.("contacts")}
+              className="w-full p-4 text-left bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors duration-300 group"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <MessageCircle
@@ -269,7 +276,10 @@ const AdminDashboard: React.FC = () => {
               </div>
             </button>
 
-            <button className="w-full p-4 text-left bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors duration-300 group">
+            <button
+              onClick={() => onSectionChange?.("join-us")}
+              className="w-full p-4 text-left bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors duration-300 group"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <UserPlus
@@ -293,7 +303,10 @@ const AdminDashboard: React.FC = () => {
             </button>
 
             {auth.user?.role === "admin" && (
-              <button className="w-full p-4 text-left bg-green-50 hover:bg-green-100 rounded-xl transition-colors duration-300 group">
+              <button
+                onClick={() => onSectionChange?.("users")}
+                className="w-full p-4 text-left bg-green-50 hover:bg-green-100 rounded-xl transition-colors duration-300 group"
+              >
                 <div className="flex items-center space-x-3">
                   <Users
                     className="text-green-500 group-hover:scale-110 transition-transform duration-300"
