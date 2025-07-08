@@ -204,7 +204,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                 onLanguageChange={handleLanguageChange}
               />
 
-              <div className="relative">
+              <div className="relative dropdown-container">
                 <button
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300 relative"
