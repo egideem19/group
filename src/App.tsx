@@ -62,7 +62,7 @@ const AppContent: React.FC = () => {
     const renderAdminContent = () => {
       switch (adminSection) {
         case "dashboard":
-          return <AdminDashboard />;
+          return <AdminDashboard onSectionChange={setAdminSection} />;
         case "contacts":
           return <ContactMessagesManager />;
         case "join-us":
@@ -70,7 +70,7 @@ const AppContent: React.FC = () => {
         case "users":
           return <UserManager />;
         default:
-          return <AdminDashboard />;
+          return <AdminDashboard onSectionChange={setAdminSection} />;
       }
     };
 
@@ -552,7 +552,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
       icon: Globe,
       title: "Distribution Internationale",
       description:
-        "Accès aux marchés internationaux grâce à notre réseau de partenaires. Distribution physique et digitale, négociation de contrats et développement commercial à l'étranger.",
+        "Accès aux marchés internationaux grâce �� notre réseau de partenaires. Distribution physique et digitale, négociation de contrats et développement commercial à l'étranger.",
       features: [
         "Réseau international",
         "Distribution globale",
