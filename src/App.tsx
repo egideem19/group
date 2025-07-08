@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Music, 
-  Video, 
-  Users, 
-  Star, 
-  Menu, 
-  X, 
-  Play, 
-  Award, 
-  Globe, 
+import {
+  Music,
+  Video,
+  Users,
+  Star,
+  Menu,
+  X,
+  Play,
+  Award,
+  Globe,
   Target,
   TrendingUp,
   Shield,
@@ -34,12 +34,61 @@ import {
   Zap,
   Heart,
   Send,
-  Film
+  Film,
+  LogIn
 } from 'lucide-react';
 import LanguageSwitcher from './components/LanguageSwitcher';
+import LoginPage from './components/LoginPage';
+import AdminLayout from './components/AdminLayout';
+import AdminDashboard from './components/AdminDashboard';
+import ContactMessagesManager from './components/ContactMessagesManager';
+import JoinUsManager from './components/JoinUsManager';
+import UserManager from './components/UserManager';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { translations } from './types/language';
+import { addContactMessage, addJoinUsApplication } from './utils/storage';
 
-function App() {
+// Component principal avec authentification
+const AppContent: React.FC = () => {
+  const { auth } = useAuth();
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [adminSection, setAdminSection] = useState('dashboard');
+
+  if (showAdmin && !auth.isAuthenticated) {
+    return <LoginPage onLoginSuccess={() => setShowAdmin(true)} />;
+  }
+
+  if (showAdmin && auth.isAuthenticated) {
+    const renderAdminContent = () => {
+      switch (adminSection) {
+        case 'dashboard':
+          return <AdminDashboard />;
+        case 'contacts':
+          return <ContactMessagesManager />;
+        case 'join-us':
+          return <JoinUsManager />;
+        case 'users':
+          return <UserManager />;
+        default:
+          return <AdminDashboard />;
+      }
+    };
+
+    return (
+      <AdminLayout
+        currentSection={adminSection}
+        onSectionChange={setAdminSection}
+      >
+        {renderAdminContent()}
+      </AdminLayout>
+    );
+  }
+
+  return <MainWebsite onShowAdmin={() => setShowAdmin(true)} />;
+};
+
+// Site web principal
+const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({ onShowAdmin }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('accueil');
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -51,6 +100,8 @@ function App() {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [cursorHover, setCursorHover] = useState(false);
   const [cursorClick, setCursorClick] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [successMessageType, setSuccessMessageType] = useState<'contact' | 'joinus'>('contact');
 
   // Carousel images
   const heroImages = [
@@ -94,7 +145,7 @@ function App() {
 
     // Add hover effects to interactive elements
     const interactiveElements = document.querySelectorAll('button, a, input, textarea, select, [role="button"]');
-    
+
     const handleMouseEnter = () => setCursorHover(true);
     const handleMouseLeave = () => setCursorHover(false);
 
@@ -140,7 +191,7 @@ function App() {
         if (element) {
           const offsetTop = element.offsetTop;
           const offsetHeight = element.offsetHeight;
-          
+
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(section);
             break;
@@ -153,7 +204,7 @@ function App() {
       animatedElements.forEach((element) => {
         const elementTop = element.getBoundingClientRect().top;
         const elementVisible = 150;
-        
+
         if (elementTop < window.innerHeight - elementVisible) {
           element.classList.add('animate-fade-in-up');
         }
@@ -161,7 +212,7 @@ function App() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    
+
     // Animate hero elements immediately on load
     setTimeout(() => {
       const heroElements = document.querySelectorAll('.hero-element');
@@ -218,6 +269,47 @@ function App() {
 
   const scrollToHome = () => {
     scrollToSection('accueil');
+  };
+
+  // Handlers pour les formulaires
+  const handleContactFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    const contactData = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      subject: formData.get('subject') as string,
+      message: formData.get('message') as string
+    };
+
+    addContactMessage(contactData);
+    setSuccessMessageType('contact');
+    setShowSuccessMessage(true);
+    event.currentTarget.reset();
+
+    setTimeout(() => setShowSuccessMessage(false), 5000);
+  };
+
+  const handleJoinUsFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    const joinUsData = {
+      name: formData.get('nom') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('telephone') as string,
+      domain: formData.get('domaine') as string,
+      presentation: formData.get('presentation') as string,
+      portfolio: formData.get('portfolio') as string || undefined
+    };
+
+    addJoinUsApplication(joinUsData);
+    setSuccessMessageType('joinus');
+    setShowSuccessMessage(true);
+    event.currentTarget.reset();
+
+    setTimeout(() => setShowSuccessMessage(false), 5000);
   };
 
   const divisions = [
@@ -360,9 +452,9 @@ function App() {
       {/* Loading Screen */}
       {isLoading && (
         <div className="loading-screen">
-          <img 
-            src="/Logo_ABA-removebg-preview.png" 
-            alt="ABA Creative Group" 
+          <img
+            src="/Logo_ABA-removebg-preview.png"
+            alt="ABA Creative Group"
             className="loading-logo"
           />
           <div className="loading-text">ABA Creative Group</div>
@@ -376,7 +468,7 @@ function App() {
       )}
 
       {/* Custom Cursor */}
-      <div 
+      <div
         className={`custom-cursor ${cursorHover ? 'hover' : ''} ${cursorClick ? 'click' : ''}`}
         style={{
           left: `${cursorPosition.x - 10}px`,
@@ -389,14 +481,14 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-28">
             <div className="flex items-center">
-              <img 
+              <img
                 onClick={scrollToHome}
-                src="/Logo_ABA-removebg-preview.png" 
-                alt="ABA Creative Group" 
+                src="/Logo_ABA-removebg-preview.png"
+                alt="ABA Creative Group"
                 className="h-28 w-auto transition-transform duration-300 hover:scale-105 cursor-pointer"
               />
             </div>
-            
+
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {[
@@ -411,8 +503,8 @@ function App() {
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
                   className={`font-medium transition-all duration-300 relative ${
-                    activeSection === item.id 
-                      ? 'text-yellow-500' 
+                    activeSection === item.id
+                      ? 'text-yellow-500'
                       : 'text-gray-700 hover:text-yellow-500'
                   }`}
                 >
@@ -422,18 +514,18 @@ function App() {
                   )}
                 </button>
               ))}
-              
-              <LanguageSwitcher 
-                currentLanguage={currentLanguage} 
-                onLanguageChange={handleLanguageChange} 
+
+              <LanguageSwitcher
+                currentLanguage={currentLanguage}
+                onLanguageChange={handleLanguageChange}
               />
             </div>
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center space-x-4">
-              <LanguageSwitcher 
-                currentLanguage={currentLanguage} 
-                onLanguageChange={handleLanguageChange} 
+              <LanguageSwitcher
+                currentLanguage={currentLanguage}
+                onLanguageChange={handleLanguageChange}
               />
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -496,27 +588,27 @@ function App() {
         </div>
         <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-gray-900/80 to-black/80"></div>
         <div className="absolute inset-0 bg-yellow-400/5"></div>
-        
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center hero-element">
             <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight hero-element">
               ABA
               <span className="text-yellow-400 block animate-pulse">Creative Group</span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed hero-element">
               {t('heroSubtitle')}
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center hero-element">
-              <button 
+              <button
                 onClick={() => scrollToSection('divisions')}
                 className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center group"
               >
                 {t('discoverDivisions')}
                 <ChevronRight className="ml-2 group-hover:translate-x-1 transition-transform duration-300" size={20} />
               </button>
-              <button 
+              <button
                 onClick={() => scrollToSection('contact')}
                 className="border-2 border-yellow-400 text-yellow-400 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 hover:text-black transition-all duration-300 flex items-center group"
               >
@@ -563,8 +655,8 @@ function App() {
 
           <div className="grid md:grid-cols-2 gap-8">
             {divisions.map((division, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl ${division.hoverColor} transition-all duration-500 transform hover:-translate-y-4 hover:rotate-1 border border-gray-100 animate-on-scroll group cursor-pointer`}
                 style={{ animationDelay: `${index * 200}ms` }}
               >
@@ -576,11 +668,11 @@ function App() {
                     {division.title}
                   </h3>
                 </div>
-                
+
                 <p className="text-gray-600 mb-6 text-lg group-hover:text-gray-700 transition-colors duration-300">
                   {division.description[currentLanguage] || division.description.fr}
                 </p>
-                
+
                 <ul className="space-y-3">
                   {(division.features[currentLanguage] || division.features.fr).map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center text-gray-700 group-hover:text-gray-800 transition-colors duration-300">
@@ -589,7 +681,7 @@ function App() {
                     </li>
                   ))}
                 </ul>
-                
+
                 <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <button className="text-yellow-500 font-semibold flex items-center hover:text-yellow-600">
                     En savoir plus
@@ -613,7 +705,7 @@ function App() {
               <p className="text-xl text-gray-300 mb-8 leading-relaxed">
                 {t('missionDescription')}
               </p>
-              
+
               <div className="space-y-6">
                 <div className="flex items-start group hover:transform hover:translate-x-2 transition-all duration-300">
                   <Target className="text-yellow-400 mr-4 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" size={24} />
@@ -622,7 +714,7 @@ function App() {
                     <p className="text-gray-400">Positionner la culture congolaise sur la scène mondiale</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start group hover:transform hover:translate-x-2 transition-all duration-300">
                   <Award className="text-yellow-400 mr-4 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" size={24} />
                   <div>
@@ -630,7 +722,7 @@ function App() {
                     <p className="text-gray-400">Standards internationaux dans tous nos projets</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start group hover:transform hover:translate-x-2 transition-all duration-300">
                   <TrendingUp className="text-yellow-400 mr-4 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" size={24} />
                   <div>
@@ -640,7 +732,7 @@ function App() {
                 </div>
               </div>
             </div>
-            
+
             <div className="relative animate-on-scroll">
               <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl p-8 text-black transform hover:scale-105 transition-all duration-300 hover:shadow-2xl">
                 <h3 className="text-2xl font-bold mb-6">Pourquoi ABA Creative Group ?</h3>
@@ -682,7 +774,7 @@ function App() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <div 
+              <div
                 key={index}
                 className="bg-gray-50 rounded-2xl p-8 hover:bg-white hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 animate-on-scroll group border border-gray-100"
                 style={{ animationDelay: `${index * 200}ms` }}
@@ -724,7 +816,7 @@ function App() {
               Rejoignez la Révolution Créative
             </h2>
             <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              Vous avez un talent exceptionnel ? Une passion qui vous consume ? 
+              Vous avez un talent exceptionnel ? Une passion qui vous consume ?
               <span className="text-yellow-400 font-bold"> ABA Creative Group </span>
               recherche les prochaines stars qui feront rayonner la culture congolaise dans le monde entier.
             </p>
@@ -785,8 +877,8 @@ function App() {
                 <h3 className="text-2xl font-bold mb-6 text-center">
                   Soumettez Votre Talent
                 </h3>
-                
-                <form className="space-y-6" action="mailto:contact@abacreativegroup.com" method="post" encType="text/plain">
+
+                <form className="space-y-6" onSubmit={handleJoinUsFormSubmit}>
                   <div className="grid md:grid-cols-2 gap-4">
                     <input
                       type="text"
@@ -803,7 +895,7 @@ function App() {
                       className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:bg-white/20 transition-all duration-300"
                     />
                   </div>
-                  
+
                   <input
                     type="tel"
                     name="telephone"
@@ -811,7 +903,7 @@ function App() {
                     required
                     className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:bg-white/20 transition-all duration-300"
                   />
-                  
+
                   <select
                     name="domaine"
                     required
@@ -825,7 +917,7 @@ function App() {
                     <option value="realisateur" className="text-black">Réalisateur</option>
                     <option value="createur" className="text-black">Créateur de contenu</option>
                   </select>
-                  
+
                   <textarea
                     rows={4}
                     name="presentation"
@@ -833,14 +925,14 @@ function App() {
                     required
                     className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:bg-white/20 resize-none transition-all duration-300"
                   ></textarea>
-                  
+
                   <input
                     type="url"
                     name="portfolio"
                     placeholder="Lien vers votre portfolio/vidéo (YouTube, Instagram, etc.)"
                     className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:bg-white/20 transition-all duration-300"
                   />
-                  
+
                   <div className="bg-yellow-400/10 border border-yellow-400/30 rounded-lg p-4">
                     <h5 className="font-semibold text-yellow-400 mb-2 flex items-center">
                       <CheckCircle className="mr-2" size={16} />
@@ -852,7 +944,7 @@ function App() {
                       <li>• Avoir une passion authentique pour votre art</li>
                     </ul>
                   </div>
-                  
+
                   <button
                     type="submit"
                     className="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-black py-4 rounded-lg font-bold text-lg hover:from-yellow-300 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center group"
@@ -888,7 +980,7 @@ function App() {
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="animate-on-scroll">
               <h3 className="text-2xl font-bold mb-8">Informations de Contact</h3>
-              
+
               <div className="space-y-6">
                 <div className="flex items-center group hover:transform hover:translate-x-2 transition-all duration-300">
                   <MapPin className="text-yellow-400 mr-4 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" size={24} />
@@ -897,7 +989,7 @@ function App() {
                     <p className="text-gray-300">Kinshasa, République Démocratique du Congo</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center group hover:transform hover:translate-x-2 transition-all duration-300">
                   <Phone className="text-yellow-400 mr-4 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" size={24} />
                   <div>
@@ -905,7 +997,7 @@ function App() {
                     <p className="text-gray-300">+243 898 465 438</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center group hover:transform hover:translate-x-2 transition-all duration-300">
                   <Mail className="text-yellow-400 mr-4 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" size={24} />
                   <div>
@@ -918,12 +1010,10 @@ function App() {
 
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 animate-on-scroll hover:bg-white/10 transition-all duration-300">
               <h3 className="text-2xl font-bold mb-6">{t('sendMessage')}</h3>
-              
-              <form 
+
+              <form
                 className="space-y-6"
-                action="mailto:contact@abacreativegroup.com"
-                method="post"
-                encType="text/plain"
+                onSubmit={handleContactFormSubmit}
               >
                 <div className="grid md:grid-cols-2 gap-4">
                   <input
@@ -941,7 +1031,7 @@ function App() {
                     className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:bg-white/20 transition-all duration-300"
                   />
                 </div>
-                
+
                 <input
                   type="text"
                   name="subject"
@@ -949,7 +1039,7 @@ function App() {
                   required
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:bg-white/20 transition-all duration-300"
                 />
-                
+
                 <textarea
                   rows={5}
                   name="message"
@@ -957,7 +1047,7 @@ function App() {
                   required
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-yellow-400 focus:bg-white/20 resize-none transition-all duration-300"
                 ></textarea>
-                
+
                 <button
                   type="submit"
                   className="w-full bg-yellow-400 text-black py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
@@ -970,33 +1060,59 @@ function App() {
         </div>
       </section>
 
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-xl z-50 animate-slide-down">
+          <div className="flex items-center">
+            <CheckCircle className="mr-2" size={20} />
+            <div>
+              <p className="font-semibold">
+                {successMessageType === 'contact' ? t('thankYouMessage') : 'Candidature reçue !'}
+              </p>
+              <p className="text-sm opacity-90">
+                {successMessageType === 'contact' ? t('messageReceived') : t('applicationReceived')}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
-      <footer className="bg-black text-white py-12">
+      <footer className="bg-black text-white py-12 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center mb-6">
+            <div className="flex items-center justify-center mb-6 relative">
               <div className="bg-white rounded-lg p-4">
-                <img 
-                  src="/Logo_ABA-removebg-preview.png" 
-                  alt="ABA Creative Group" 
+                <img
+                  src="/Logo_ABA-removebg-preview.png"
+                  alt="ABA Creative Group"
                   className="h-16 w-auto hover:scale-105 transition-transform duration-300"
                 />
               </div>
+
+              {/* Bouton de connexion discret */}
+              <button
+                onClick={onShowAdmin}
+                className="absolute bottom-0 right-0 text-gray-600 hover:text-yellow-400 transition-colors duration-300 opacity-30 hover:opacity-100"
+                title="Administration"
+              >
+                <LogIn size={16} />
+              </button>
             </div>
-            
+
             <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
               {t('footerDescription')}
             </p>
-            
+
             <div className="border-t border-gray-800 pt-6">
               <p className="text-gray-500 mb-2">
                 {t('copyright')}
               </p>
               <p className="text-gray-600 text-sm">
                 {t('developedBy')}{' '}
-                <a 
-                  href="https://hibs-cd.com" 
-                  target="_blank" 
+                <a
+                  href="https://hibs-cd.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-yellow-400 hover:text-yellow-300 transition-colors duration-300 font-medium"
                 >
@@ -1008,6 +1124,16 @@ function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
