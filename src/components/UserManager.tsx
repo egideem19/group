@@ -120,6 +120,8 @@ const UserManager: React.FC = () => {
     setUsers([...users, newUser]);
     setShowCreateModal(false);
     resetForm();
+    // Force reload to ensure consistency
+    loadUsers();
   };
 
   const handleEditUser = () => {
