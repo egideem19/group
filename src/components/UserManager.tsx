@@ -108,6 +108,8 @@ const UserManager: React.FC = () => {
       return;
     }
 
+    console.log("Creating user:", formData);
+
     const newUser: UserType = {
       id: generateUserId(),
       ...formData,
@@ -116,12 +118,14 @@ const UserManager: React.FC = () => {
       createdAt: new Date().toISOString(),
     };
 
+    console.log("Saving new user:", newUser);
     saveUser(newUser);
     setUsers([...users, newUser]);
     setShowCreateModal(false);
     resetForm();
     // Force reload to ensure consistency
-    loadUsers();
+    setTimeout(() => loadUsers(), 100);
+    alert(`Utilisateur ${newUser.name} créé avec succès !`);
   };
 
   const handleEditUser = () => {
