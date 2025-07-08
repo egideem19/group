@@ -261,7 +261,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                 )}
               </div>
 
-              <div className="relative">
+              <div className="relative dropdown-container">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300"
