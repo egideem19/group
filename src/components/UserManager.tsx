@@ -137,6 +137,8 @@ const UserManager: React.FC = () => {
     setShowEditModal(false);
     setSelectedUser(null);
     resetForm();
+    // Force reload to ensure consistency
+    loadUsers();
   };
 
   const toggleUserStatus = (userId: string) => {
@@ -146,6 +148,8 @@ const UserManager: React.FC = () => {
     const updatedUser = { ...user, isActive: !user.isActive };
     saveUser(updatedUser);
     setUsers(users.map((u) => (u.id === userId ? updatedUser : u)));
+    // Force reload to ensure consistency
+    loadUsers();
   };
 
   const resetUserPassword = (userId: string) => {
@@ -161,6 +165,8 @@ const UserManager: React.FC = () => {
 
     saveUser(updatedUser);
     setUsers(users.map((u) => (u.id === userId ? updatedUser : u)));
+    // Force reload to ensure consistency
+    loadUsers();
 
     alert(
       `Mot de passe réinitialisé pour ${user.name}.\nNouveau mot de passe: ${newPassword}`,
