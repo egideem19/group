@@ -577,7 +577,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-white font-montserrat">
+    <div className="main-website min-h-screen bg-white font-montserrat">
       {/* Loading Screen */}
       {isLoading && (
         <div className="loading-screen">
