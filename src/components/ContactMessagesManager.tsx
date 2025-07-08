@@ -96,6 +96,8 @@ const ContactMessagesManager: React.FC = () => {
     setMessages(updatedMessages);
     setSelectedMessage(null);
     setNotes("");
+    // Force reload to ensure consistency
+    loadMessages();
   };
 
   const formatDate = (dateString: string) => {

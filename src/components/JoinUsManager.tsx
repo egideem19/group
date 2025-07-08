@@ -112,6 +112,8 @@ const JoinUsManager: React.FC = () => {
     setApplications(updatedApplications);
     setSelectedApplication(null);
     setNotes("");
+    // Force reload to ensure consistency
+    loadApplications();
   };
 
   const formatDate = (dateString: string) => {
