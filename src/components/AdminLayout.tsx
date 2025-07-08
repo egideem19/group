@@ -62,7 +62,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     },
     {
       id: "join-us",
-      label: "Rejoignez-nous",
+      label: "Gestion Candidatures",
       icon: UserPlus,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
