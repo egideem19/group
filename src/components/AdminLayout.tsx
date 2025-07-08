@@ -189,10 +189,62 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                 onLanguageChange={handleLanguageChange}
               />
 
-              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300 relative">
-                <Bell size={20} className="text-gray-600" />
-                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300 relative"
+                >
+                  <Bell size={20} className="text-gray-600" />
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                </button>
+
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-200">
+                      <h3 className="font-semibold text-gray-900">
+                        Notifications
+                      </h3>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto">
+                      <div className="px-4 py-3 hover:bg-gray-50 transition-colors duration-300">
+                        <div className="flex items-start space-x-3">
+                          <div className="bg-blue-500 p-2 rounded-full">
+                            <MessageCircle size={12} className="text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">
+                              Nouveau message de contact
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Il y a 5 minutes
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="px-4 py-3 hover:bg-gray-50 transition-colors duration-300">
+                        <div className="flex items-start space-x-3">
+                          <div className="bg-purple-500 p-2 rounded-full">
+                            <UserPlus size={12} className="text-white" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">
+                              Nouvelle candidature reçue
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Il y a 10 minutes
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="px-4 py-2 border-t border-gray-200">
+                      <button className="text-sm text-blue-600 hover:text-blue-800 transition-colors duration-300">
+                        Voir toutes les notifications
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <div className="relative">
                 <button
