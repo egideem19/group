@@ -136,13 +136,15 @@ const UserManager: React.FC = () => {
       ...formData,
     };
 
+    console.log("Updating user:", updatedUser);
     saveUser(updatedUser);
     setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
     setShowEditModal(false);
     setSelectedUser(null);
     resetForm();
     // Force reload to ensure consistency
-    loadUsers();
+    setTimeout(() => loadUsers(), 100);
+    alert(`Utilisateur ${updatedUser.name} modifié avec succès !`);
   };
 
   const toggleUserStatus = (userId: string) => {
@@ -150,10 +152,14 @@ const UserManager: React.FC = () => {
     if (!user || user.id === auth.user?.id) return; // Can't deactivate yourself
 
     const updatedUser = { ...user, isActive: !user.isActive };
+    console.log("Toggling user status:", updatedUser);
     saveUser(updatedUser);
     setUsers(users.map((u) => (u.id === userId ? updatedUser : u)));
     // Force reload to ensure consistency
-    loadUsers();
+    setTimeout(() => loadUsers(), 100);
+    alert(
+      `Statut de ${user.name} ${updatedUser.isActive ? "activé" : "suspendu"} !`,
+    );
   };
 
   const resetUserPassword = (userId: string) => {
