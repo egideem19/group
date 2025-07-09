@@ -626,13 +626,27 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
           </p>
 
           {/* Bouton d'entrée après 2 secondes */}
-          <button
-            onClick={() => setIsLoading(false)}
-            className="mt-6 px-6 py-3 bg-yellow-400 text-black rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 animate-pulse"
-            style={{ animationDelay: "2s" }}
-          >
-            Entrer sur le site
-          </button>
+          <div className="mt-6 space-y-3">
+            <button
+              onClick={() => setIsLoading(false)}
+              className="block px-6 py-3 bg-yellow-400 text-black rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 animate-pulse"
+              style={{ animationDelay: "2s" }}
+            >
+              Entrer sur le site
+            </button>
+
+            {/* Bouton admin temporaire */}
+            <button
+              onClick={() => {
+                setIsLoading(false);
+                setTimeout(() => onShowAdmin(), 100);
+              }}
+              className="block px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-all duration-300"
+              style={{ animationDelay: "3s" }}
+            >
+              🔐 Administration (Test)
+            </button>
+          </div>
         </div>
       )}
 
