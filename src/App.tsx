@@ -56,18 +56,22 @@ const AppContent: React.FC = () => {
   const [showAdmin, setShowAdmin] = useState(false);
   const [adminSection, setAdminSection] = useState("dashboard");
 
-  // Listen to auth changes to reset admin view
+  // Listen to auth changes to reset admin view (only on logout, not on initial access)
   useEffect(() => {
     console.log("Auth state:", {
       isAuthenticated: auth.isAuthenticated,
       showAdmin,
       user: auth.user,
     });
-    if (!auth.isAuthenticated && showAdmin) {
+
+    // Only reset if user was authenticated before and now is not (logout scenario)
+    // Don't reset on initial access attempt
+    if (!auth.isAuthenticated && showAdmin && auth.user === null) {
+      console.log("User logged out, resetting admin view");
       setShowAdmin(false);
       setAdminSection("dashboard");
     }
-  }, [auth.isAuthenticated, showAdmin]);
+  }, [auth.isAuthenticated]);
 
   if (showAdmin && !auth.isAuthenticated) {
     console.log("Showing login page");
