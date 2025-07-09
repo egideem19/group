@@ -44,6 +44,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import ContactMessagesManager from "./components/ContactMessagesManager";
 import JoinUsManager from "./components/JoinUsManager";
 import UserManager from "./components/UserManager";
+import BackupManager from "./components/BackupManager";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { translations } from "./types/language";
 import { addContactMessage, addJoinUsApplication } from "./utils/storage";
@@ -69,6 +70,8 @@ const AppContent: React.FC = () => {
           return <JoinUsManager />;
         case "users":
           return <UserManager />;
+        case "backup":
+          return <BackupManager />;
         default:
           return <AdminDashboard onSectionChange={setAdminSection} />;
       }
@@ -552,7 +555,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
       icon: Globe,
       title: "Distribution Internationale",
       description:
-        "Accès aux marchés internationaux grâce �� notre réseau de partenaires. Distribution physique et digitale, négociation de contrats et développement commercial à l'étranger.",
+        "Accès aux marchés internationaux grâce à notre réseau de partenaires. Distribution physique et digitale, négociation de contrats et développement commercial à l'étranger.",
       features: [
         "Réseau international",
         "Distribution globale",
