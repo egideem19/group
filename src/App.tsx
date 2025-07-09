@@ -143,7 +143,24 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
       setIsLoading(false);
     }, 1500);
 
-    return () => clearTimeout(timer);
+    // Failsafe: Force stop loading after 3 seconds max
+    const failsafe = setTimeout(() => {
+      console.warn("Failsafe: Force stopping loading screen");
+      setIsLoading(false);
+    }, 3000);
+
+    // Also stop loading on any user interaction
+    const handleUserInteraction = () => {
+      setIsLoading(false);
+    };
+
+    window.addEventListener("click", handleUserInteraction, { once: true });
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(failsafe);
+      window.removeEventListener("click", handleUserInteraction);
+    };
   }, []);
 
   // Custom cursor
