@@ -58,6 +58,11 @@ const AppContent: React.FC = () => {
 
   // Listen to auth changes to reset admin view
   useEffect(() => {
+    console.log("Auth state:", {
+      isAuthenticated: auth.isAuthenticated,
+      showAdmin,
+      user: auth.user,
+    });
     if (!auth.isAuthenticated && showAdmin) {
       setShowAdmin(false);
       setAdminSection("dashboard");
