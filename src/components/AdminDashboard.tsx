@@ -26,6 +26,7 @@ import { DashboardStats } from "../types/admin";
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onSectionChange }) => {
   const { auth } = useAuth();
   const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [analytics, setAnalytics] = useState<any>(null);
   const [timeFilter, setTimeFilter] = useState("today");
 
   useEffect(() => {
@@ -34,7 +35,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onSectionChange }) => {
 
   const loadStats = () => {
     const dashboardStats = getDashboardStats();
+    const analyticsData = getAnalytics();
     setStats(dashboardStats);
+    setAnalytics(analyticsData);
   };
 
   const formatDate = (dateString: string) => {
