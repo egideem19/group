@@ -48,6 +48,7 @@ import BackupManager from "./components/BackupManager";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { translations } from "./types/language";
 import { addContactMessage, addJoinUsApplication } from "./utils/storage";
+import { logFormSubmission } from "./utils/realTimeMonitor";
 
 // Component principal avec authentification
 const AppContent: React.FC = () => {
