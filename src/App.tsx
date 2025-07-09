@@ -138,16 +138,16 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
     const savedLanguage = localStorage.getItem("language") || "fr";
     setCurrentLanguage(savedLanguage);
 
-    // Loading screen - réduit pour éviter les blocages
+    // Loading screen - très court pour test
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 500);
 
-    // Failsafe: Force stop loading after 3 seconds max
+    // Failsafe: Force stop loading after 1 second max
     const failsafe = setTimeout(() => {
       console.warn("Failsafe: Force stopping loading screen");
       setIsLoading(false);
-    }, 3000);
+    }, 1000);
 
     // Also stop loading on any user interaction
     const handleUserInteraction = () => {
@@ -1232,7 +1232,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
                       Conditions de Soumission
                     </h5>
                     <ul className="text-sm text-gray-300 space-y-1">
-                      <li>• Être âgé de 16 ans minimum</li>
+                      <li>��� Être âgé de 16 ans minimum</li>
                       <li>
                         • Fournir un portfolio ou une démonstration de votre
                         talent
