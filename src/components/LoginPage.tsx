@@ -27,6 +27,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
   const { login, changePassword } = useAuth();
 
+  // Debug: Log when LoginPage is mounted
+  useEffect(() => {
+    console.log("🔐 LoginPage mounted");
+    return () => console.log("🔐 LoginPage unmounted");
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
