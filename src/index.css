@@ -190,6 +190,11 @@
   visibility: hidden;
 }
 
+.loading-screen button {
+  cursor: pointer !important;
+  animation: fadeInUp 1s ease-out 2s both;
+}
+
 .loading-logo {
   width: 120px;
   height: 120px;
