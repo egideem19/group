@@ -173,12 +173,43 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background */}
+      {/* Enhanced Animated background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-yellow-400/5"></div>
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-400/5 rounded-full blur-3xl animate-ping"></div>
+
+        {/* Floating particles */}
+        <div
+          className="absolute top-10 left-10 w-2 h-2 bg-yellow-400/30 rounded-full animate-bounce"
+          style={{ animationDelay: "0s" }}
+        ></div>
+        <div
+          className="absolute top-20 right-20 w-1 h-1 bg-yellow-400/40 rounded-full animate-bounce"
+          style={{ animationDelay: "1s" }}
+        ></div>
+        <div
+          className="absolute bottom-20 left-20 w-3 h-3 bg-yellow-400/20 rounded-full animate-bounce"
+          style={{ animationDelay: "2s" }}
+        ></div>
+        <div
+          className="absolute bottom-10 right-10 w-2 h-2 bg-yellow-400/35 rounded-full animate-bounce"
+          style={{ animationDelay: "0.5s" }}
+        ></div>
+
+        {/* Gradient orbs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-r from-yellow-400/10 to-orange-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-yellow-400/5 to-yellow-600/5 rounded-full blur-3xl animate-ping"></div>
+
+        {/* Grid pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div
+            className="w-full h-full"
+            style={{
+              backgroundImage: `radial-gradient(circle at 25px 25px, rgba(251, 191, 36, 0.1) 2px, transparent 0)`,
+              backgroundSize: "50px 50px",
+            }}
+          ></div>
+        </div>
       </div>
 
       <div className="relative max-w-md w-full">
