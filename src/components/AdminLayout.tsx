@@ -95,7 +95,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   const handleLogout = () => {
     logout();
-    window.location.reload();
+    // Force return to login instead of main site
+    setTimeout(() => {
+      window.location.href = window.location.origin;
+    }, 100);
   };
 
   // Close dropdowns when clicking outside
