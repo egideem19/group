@@ -114,6 +114,7 @@ const AppContent: React.FC = () => {
       onShowAdmin={() => {
         console.log("onShowAdmin called!");
         setShowAdmin(true);
+        setForceLogin(true);
       }}
     />
   );
