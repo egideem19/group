@@ -121,7 +121,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       <aside
         className={`bg-white shadow-xl border-r border-gray-200 transition-all duration-300 ${
           isSidebarOpen ? "w-64" : "w-16"
-        } md:w-64 fixed md:relative h-full z-40`}
+        } md:w-64 fixed md:relative h-full z-40 flex flex-col`}
       >
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
@@ -135,8 +135,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           </div>
         </div>
 
-        <nav className="mt-6 px-4">
-          <ul className="space-y-2">
+        <nav className="flex-1 mt-6 px-4 overflow-y-auto">
+          <ul className="space-y-2 pb-4">
             {menuItems.map((item) => (
               <li key={item.id}>
                 <button
@@ -162,12 +162,12 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
           </ul>
         </nav>
 
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="p-4 border-t border-gray-200 flex-shrink-0">
           <div
             className={`${isSidebarOpen ? "block" : "hidden"} md:block bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-xl p-4 text-black`}
           >
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-black/20 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-black/20 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="font-bold text-sm">
                   {auth.user?.name
                     .split(" ")
@@ -176,9 +176,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                     .slice(0, 2)}
                 </span>
               </div>
-              <div>
-                <p className="font-semibold text-sm">{auth.user?.name}</p>
-                <p className="text-xs opacity-80">
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-sm truncate">
+                  {auth.user?.name}
+                </p>
+                <p className="text-xs opacity-80 truncate">
                   {auth.user?.role === "admin"
                     ? "Administrateur"
                     : auth.user?.role === "contact_manager"
