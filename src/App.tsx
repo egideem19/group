@@ -342,6 +342,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
     };
 
     addJoinUsApplication(joinUsData);
+    logFormSubmission("join_us", joinUsData);
     setSuccessMessageType("joinus");
     setShowSuccessMessage(true);
     event.currentTarget.reset();
