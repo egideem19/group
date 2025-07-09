@@ -12,6 +12,7 @@ import {
   Bell,
   Search,
   ChevronDown,
+  Database,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import LanguageSwitcher from "./LanguageSwitcher";
