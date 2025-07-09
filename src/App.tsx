@@ -1391,12 +1391,20 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
 
               {/* Bouton de connexion discret */}
               <button
-                onClick={onShowAdmin}
+                onClick={() => {
+                  console.log("Admin button clicked!");
+                  onShowAdmin();
+                }}
                 className="absolute bottom-0 right-0 text-gray-600 hover:text-yellow-400 transition-colors duration-300 opacity-30 hover:opacity-100"
                 title="Administration"
               >
                 <LogIn size={16} />
               </button>
+
+              {/* Debug info - sera retiré */}
+              <div className="absolute top-0 left-0 text-xs text-gray-500 bg-black/20 p-1 rounded">
+                Debug: Admin button ready
+              </div>
             </div>
 
             <p className="text-gray-400 mb-6 max-w-2xl mx-auto">
