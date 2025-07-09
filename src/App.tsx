@@ -70,10 +70,19 @@ const AppContent: React.FC = () => {
   }, [auth.isAuthenticated, showAdmin]);
 
   if (showAdmin && !auth.isAuthenticated) {
-    return <LoginPage onLoginSuccess={() => setShowAdmin(true)} />;
+    console.log("Showing login page");
+    return (
+      <LoginPage
+        onLoginSuccess={() => {
+          console.log("Login successful, keeping admin view");
+          setShowAdmin(true);
+        }}
+      />
+    );
   }
 
   if (showAdmin && auth.isAuthenticated) {
+    console.log("Showing admin dashboard");
     const renderAdminContent = () => {
       switch (adminSection) {
         case "dashboard":
@@ -101,7 +110,14 @@ const AppContent: React.FC = () => {
     );
   }
 
-  return <MainWebsite onShowAdmin={() => setShowAdmin(true)} />;
+  return (
+    <MainWebsite
+      onShowAdmin={() => {
+        console.log("onShowAdmin called!");
+        setShowAdmin(true);
+      }}
+    />
+  );
 };
 
 // Site web principal
