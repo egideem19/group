@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-
-interface AdminDashboardProps {
-  onSectionChange?: (section: string) => void;
-}
 import {
   MessageCircle,
   UserPlus,
@@ -18,10 +14,20 @@ import {
   Star,
   ArrowUp,
   ArrowDown,
+  Download,
+  Eye,
+  Target,
+  Zap,
+  Award,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { getDashboardStats } from "../utils/storage";
+import { getAnalytics, exportAnalytics } from "../utils/analytics";
 import { DashboardStats } from "../types/admin";
+
+interface AdminDashboardProps {
+  onSectionChange?: (section: string) => void;
+}
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onSectionChange }) => {
   const { auth } = useAuth();
