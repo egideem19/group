@@ -82,6 +82,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
       bgColor: "bg-orange-500/10",
       permission: auth.user?.role === "admin",
     },
+    {
+      id: "backup",
+      label: "Sauvegardes",
+      icon: Database,
+      color: "text-indigo-500",
+      bgColor: "bg-indigo-500/10",
+      permission: auth.user?.role === "admin",
+    },
   ].filter((item) => item.permission === "all" || item.permission === true);
 
   const handleLogout = () => {
