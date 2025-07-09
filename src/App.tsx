@@ -76,6 +76,10 @@ const AppContent: React.FC = () => {
           setForceLogin(false);
           setShowAdmin(true);
         }}
+        onBackToSite={() => {
+          setShowAdmin(false);
+          setForceLogin(false);
+        }}
       />
     );
   }
