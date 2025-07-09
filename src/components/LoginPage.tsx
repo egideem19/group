@@ -8,14 +8,19 @@ import {
   Shield,
   Sparkles,
   LogIn,
+  ArrowLeft,
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 
 interface LoginPageProps {
   onLoginSuccess: () => void;
+  onBackToSite: () => void;
 }
 
-const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
+const LoginPage: React.FC<LoginPageProps> = ({
+  onLoginSuccess,
+  onBackToSite,
+}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -91,6 +96,16 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
         <div className="relative max-w-md w-full">
           <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div className="flex justify-between items-center mb-6">
+              <button
+                onClick={onBackToSite}
+                className="flex items-center text-gray-400 hover:text-yellow-400 transition-colors duration-300"
+              >
+                <ArrowLeft size={20} className="mr-2" />
+                Retour au site
+              </button>
+            </div>
+
             <div className="text-center mb-8">
               <div className="bg-yellow-400 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
                 <Shield className="text-black" size={32} />
@@ -220,6 +235,16 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
       <div className="relative max-w-md w-full">
         <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20 transform hover:scale-105 transition-all duration-300">
+          <div className="flex justify-between items-center mb-6">
+            <button
+              onClick={onBackToSite}
+              className="flex items-center text-gray-400 hover:text-yellow-400 transition-colors duration-300"
+            >
+              <ArrowLeft size={20} className="mr-2" />
+              Retour au site
+            </button>
+          </div>
+
           <div className="text-center mb-8">
             <div className="bg-yellow-400 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
               <LogIn className="text-black" size={40} />
@@ -295,24 +320,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               )}
             </button>
           </form>
-
-          <div className="mt-8 text-center">
-            <div className="bg-yellow-400/10 border border-yellow-400/30 rounded-lg p-4">
-              <p className="text-yellow-300 text-sm font-semibold mb-2">
-                Identifiants par défaut :
-              </p>
-              <div className="text-gray-300 text-sm space-y-1">
-                <p>
-                  Utilisateur :{" "}
-                  <span className="text-yellow-400 font-mono">admin</span>
-                </p>
-                <p>
-                  Mot de passe :{" "}
-                  <span className="text-yellow-400 font-mono">Admin123</span>
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="text-center mt-6">
