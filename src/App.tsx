@@ -138,10 +138,10 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
     const savedLanguage = localStorage.getItem("language") || "fr";
     setCurrentLanguage(savedLanguage);
 
-    // Loading screen
+    // Loading screen - réduit pour éviter les blocages
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
