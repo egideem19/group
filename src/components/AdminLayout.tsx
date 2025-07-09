@@ -16,6 +16,7 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { translations } from "../types/language";
+import { useNotifications } from "../hooks/useNotifications";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
