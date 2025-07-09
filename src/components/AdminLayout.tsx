@@ -33,6 +33,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { auth, logout } = useAuth();
+  const { notifications, unreadCount, markAsRead, markAllAsRead, getTimeAgo } =
+    useNotifications();
 
   const t = (key: string): string => {
     return translations[currentLanguage]?.[key] || translations.fr[key] || key;
@@ -210,7 +212,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
                   className="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300 relative"
                 >
                   <Bell size={20} className="text-gray-600" />
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full animate-pulse flex items-center justify-center text-xs text-white font-bold">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
                 </button>
 
                 {showNotifications && (
