@@ -320,6 +320,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
     };
 
     addContactMessage(contactData);
+    logFormSubmission("contact", contactData);
     setSuccessMessageType("contact");
     setShowSuccessMessage(true);
     event.currentTarget.reset();
