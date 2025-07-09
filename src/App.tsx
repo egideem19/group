@@ -54,6 +54,7 @@ import { logFormSubmission } from "./utils/realTimeMonitor";
 const AppContent: React.FC = () => {
   const { auth } = useAuth();
   const [showAdmin, setShowAdmin] = useState(false);
+  const [forceLogin, setForceLogin] = useState(false);
   const [adminSection, setAdminSection] = useState("dashboard");
 
   // Debug: Log auth state changes
