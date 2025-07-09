@@ -624,6 +624,15 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
           <p className="text-gray-400 mt-4 text-center">
             Chargement de l'expérience créative...
           </p>
+
+          {/* Bouton d'entrée après 2 secondes */}
+          <button
+            onClick={() => setIsLoading(false)}
+            className="mt-6 px-6 py-3 bg-yellow-400 text-black rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 animate-pulse"
+            style={{ animationDelay: "2s" }}
+          >
+            Entrer sur le site
+          </button>
         </div>
       )}
 
