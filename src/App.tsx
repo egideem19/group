@@ -1441,9 +1441,18 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
                 <LogIn size={16} />
               </button>
 
-              {/* Debug info - sera retiré */}
-              <div className="absolute top-0 left-0 text-xs text-gray-500 bg-black/20 p-1 rounded">
-                Debug: Admin button ready
+              {/* Debug info et bouton de test - sera retiré */}
+              <div className="absolute top-0 left-0 text-xs text-gray-500 bg-black/20 p-2 rounded space-y-2">
+                <div>Debug: Admin button ready</div>
+                <button
+                  onClick={() => {
+                    console.log("TEST: Direct admin access");
+                    onShowAdmin();
+                  }}
+                  className="block px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
+                >
+                  TEST ADMIN
+                </button>
               </div>
             </div>
 
