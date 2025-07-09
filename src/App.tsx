@@ -110,7 +110,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showSubmissionForm, setShowSubmissionForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Désactivé temporairement pour test
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [cursorHover, setCursorHover] = useState(false);
   const [cursorClick, setCursorClick] = useState(false);
@@ -1232,7 +1232,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
                       Conditions de Soumission
                     </h5>
                     <ul className="text-sm text-gray-300 space-y-1">
-                      <li>��� Être âgé de 16 ans minimum</li>
+                      <li>• Être âgé de 16 ans minimum</li>
                       <li>
                         • Fournir un portfolio ou une démonstration de votre
                         talent
