@@ -1,5 +1,8 @@
 import { User, ContactMessage, JoinUsApplication } from "../types/admin";
 
+// Import and re-export the new database system
+export * from "./database";
+
 // Default admin user
 const DEFAULT_ADMIN: User = {
   id: "admin-1",
