@@ -611,7 +611,7 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
     <div className="main-website min-h-screen bg-white font-montserrat">
       {/* Loading Screen */}
       {isLoading && (
-        <div className="loading-screen">
+        <div className="loading-screen" onClick={() => setIsLoading(false)}>
           <img
             src="/Logo_ABA-removebg-preview.png"
             alt="ABA Creative Group"
@@ -625,27 +625,32 @@ const MainWebsite: React.FC<{ onShowAdmin: () => void }> = ({
             Chargement de l'expérience créative...
           </p>
 
-          {/* Bouton d'entrée après 2 secondes */}
+          {/* Boutons immédiatement visibles */}
           <div className="mt-6 space-y-3">
             <button
-              onClick={() => setIsLoading(false)}
-              className="block px-6 py-3 bg-yellow-400 text-black rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-300 animate-pulse"
-              style={{ animationDelay: "2s" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsLoading(false);
+              }}
+              className="block px-8 py-4 bg-yellow-400 text-black rounded-lg font-bold text-lg hover:bg-yellow-300 transition-all duration-300 shadow-lg"
             >
-              Entrer sur le site
+              ⚡ Entrer sur le site
             </button>
 
-            {/* Bouton admin temporaire */}
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setIsLoading(false);
                 setTimeout(() => onShowAdmin(), 100);
               }}
-              className="block px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-all duration-300"
-              style={{ animationDelay: "3s" }}
+              className="block px-8 py-4 bg-red-600 text-white rounded-lg font-bold text-lg hover:bg-red-700 transition-all duration-300 shadow-lg"
             >
-              🔐 Administration (Test)
+              🔐 Administration
             </button>
+
+            <p className="text-gray-500 text-sm mt-4">
+              Cliquez n'importe où ou sur un bouton pour continuer
+            </p>
           </div>
         </div>
       )}
