@@ -66,12 +66,14 @@ const AppContent: React.FC = () => {
     });
   }, [auth.isAuthenticated, showAdmin]);
 
-  if (showAdmin && !auth.isAuthenticated) {
+  // Force login page if requested or if trying to access admin without auth
+  if ((showAdmin && !auth.isAuthenticated) || forceLogin) {
     console.log("Showing login page");
     return (
       <LoginPage
         onLoginSuccess={() => {
           console.log("Login successful, keeping admin view");
+          setForceLogin(false);
           setShowAdmin(true);
         }}
       />
