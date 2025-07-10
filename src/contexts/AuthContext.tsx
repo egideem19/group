@@ -66,8 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     error?: string;
   }> => {
     try {
-      const users = getStoredUsers();
-      const user = getUserByCredentials(username, password);
+      const user = await getUserByCredentials(username, password);
 
       if (!user) {
         return {
@@ -85,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       // Update last login
       user.lastLogin = new Date().toISOString();
-      saveUser(user);
+      await saveUser(user);
 
       const newAuth = {
         isAuthenticated: true,
@@ -126,7 +125,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         isFirstLogin: false,
       };
 
-      saveUser(updatedUser);
+      await saveUser(updatedUser);
 
       const newAuth = {
         ...auth,

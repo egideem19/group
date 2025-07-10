@@ -1,7 +1,40 @@
 import { User, ContactMessage, JoinUsApplication } from "../types/admin";
 
-// Import and re-export the new database system
-export * from "./database";
+// Import Supabase functions
+import {
+  getStoredUsers as getSupabaseUsers,
+  saveUser as saveSupabaseUser,
+  getUserByCredentials as getSupabaseUserByCredentials,
+  generateUserId as generateSupabaseUserId,
+  getContactMessages as getSupabaseContactMessages,
+  saveContactMessage as saveSupabaseContactMessage,
+  addContactMessage as addSupabaseContactMessage,
+  getJoinUsApplications as getSupabaseJoinUsApplications,
+  saveJoinUsApplication as saveSupabaseJoinUsApplication,
+  addJoinUsApplication as addSupabaseJoinUsApplication,
+  getDashboardStats as getSupabaseDashboardStats,
+  testSupabaseConnection,
+} from './supabaseStorage';
+
+// Check if Supabase is available
+const useSupabase = async (): Promise<boolean> => {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  
+  if (!supabaseUrl || !supabaseKey) {
+    console.log('📦 Using localStorage fallback (Supabase not configured)');
+    return false;
+  }
+  
+  const isConnected = await testSupabaseConnection();
+  if (isConnected) {
+    console.log('🚀 Using Supabase database');
+    return true;
+  } else {
+    console.log('📦 Using localStorage fallback (Supabase connection failed)');
+    return false;
+  }
+};
 
 // Default admin user
 const DEFAULT_ADMIN: User = {
@@ -34,15 +67,23 @@ const initializeStorage = () => {
   }
 };
 
-// Users
-export const getStoredUsers = (): User[] => {
+// Users - with Supabase integration
+export const getStoredUsers = async (): Promise<User[]> => {
+  if (await useSupabase()) {
+    return getSupabaseUsers();
+  }
+  
   initializeStorage();
   const users = localStorage.getItem("admin_users");
   return users ? JSON.parse(users) : [DEFAULT_ADMIN];
 };
 
-export const saveUser = (user: User): void => {
-  const users = getStoredUsers();
+export const saveUser = async (user: User): Promise<void> => {
+  if (await useSupabase()) {
+    return saveSupabaseUser(user);
+  }
+  
+  const users = await getStoredUsers();
   const existingIndex = users.findIndex((u) => u.id === user.id);
 
   if (existingIndex >= 0) {
@@ -54,11 +95,15 @@ export const saveUser = (user: User): void => {
   localStorage.setItem("admin_users", JSON.stringify(users));
 };
 
-export const getUserByCredentials = (
+export const getUserByCredentials = async (
   username: string,
   password: string,
-): User | null => {
-  const users = getStoredUsers();
+): Promise<User | null> => {
+  if (await useSupabase()) {
+    return getSupabaseUserByCredentials(username, password);
+  }
+  
+  const users = await getStoredUsers();
   return (
     users.find(
       (user) => user.username === username && user.password === password,
@@ -67,18 +112,30 @@ export const getUserByCredentials = (
 };
 
 export const generateUserId = (): string => {
+  // Use crypto.randomUUID if available, fallback to timestamp-based
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
   return "user-" + Date.now() + "-" + Math.random().toString(36).substr(2, 9);
 };
 
-// Contact Messages
-export const getContactMessages = (): ContactMessage[] => {
+// Contact Messages - with Supabase integration
+export const getContactMessages = async (): Promise<ContactMessage[]> => {
+  if (await useSupabase()) {
+    return getSupabaseContactMessages();
+  }
+  
   initializeStorage();
   const messages = localStorage.getItem("contact_messages");
   return messages ? JSON.parse(messages) : [];
 };
 
-export const saveContactMessage = (message: ContactMessage): void => {
-  const messages = getContactMessages();
+export const saveContactMessage = async (message: ContactMessage): Promise<void> => {
+  if (await useSupabase()) {
+    return saveSupabaseContactMessage(message);
+  }
+  
+  const messages = await getContactMessages();
   const existingIndex = messages.findIndex((m) => m.id === message.id);
 
   if (existingIndex >= 0) {
@@ -90,9 +147,13 @@ export const saveContactMessage = (message: ContactMessage): void => {
   localStorage.setItem("contact_messages", JSON.stringify(messages));
 };
 
-export const addContactMessage = (
+export const addContactMessage = async (
   data: Omit<ContactMessage, "id" | "submittedAt" | "status">,
-): ContactMessage => {
+): Promise<ContactMessage> => {
+  if (await useSupabase()) {
+    return addSupabaseContactMessage(data);
+  }
+  
   const message: ContactMessage = {
     id: "contact-" + Date.now(),
     ...data,
@@ -100,19 +161,27 @@ export const addContactMessage = (
     submittedAt: new Date().toISOString(),
   };
 
-  saveContactMessage(message);
+  await saveContactMessage(message);
   return message;
 };
 
-// Join Us Applications
-export const getJoinUsApplications = (): JoinUsApplication[] => {
+// Join Us Applications - with Supabase integration
+export const getJoinUsApplications = async (): Promise<JoinUsApplication[]> => {
+  if (await useSupabase()) {
+    return getSupabaseJoinUsApplications();
+  }
+  
   initializeStorage();
   const applications = localStorage.getItem("join_us_applications");
   return applications ? JSON.parse(applications) : [];
 };
 
-export const saveJoinUsApplication = (application: JoinUsApplication): void => {
-  const applications = getJoinUsApplications();
+export const saveJoinUsApplication = async (application: JoinUsApplication): Promise<void> => {
+  if (await useSupabase()) {
+    return saveSupabaseJoinUsApplication(application);
+  }
+  
+  const applications = await getJoinUsApplications();
   const existingIndex = applications.findIndex((a) => a.id === application.id);
 
   if (existingIndex >= 0) {
@@ -124,9 +193,13 @@ export const saveJoinUsApplication = (application: JoinUsApplication): void => {
   localStorage.setItem("join_us_applications", JSON.stringify(applications));
 };
 
-export const addJoinUsApplication = (
+export const addJoinUsApplication = async (
   data: Omit<JoinUsApplication, "id" | "submittedAt" | "status">,
-): JoinUsApplication => {
+): Promise<JoinUsApplication> => {
+  if (await useSupabase()) {
+    return addSupabaseJoinUsApplication(data);
+  }
+  
   const application: JoinUsApplication = {
     id: "joinus-" + Date.now(),
     ...data,
@@ -134,15 +207,19 @@ export const addJoinUsApplication = (
     submittedAt: new Date().toISOString(),
   };
 
-  saveJoinUsApplication(application);
+  await saveJoinUsApplication(application);
   return application;
 };
 
-// Dashboard Stats
-export const getDashboardStats = () => {
-  const contacts = getContactMessages();
-  const joinUs = getJoinUsApplications();
-  const users = getStoredUsers();
+// Dashboard Stats - with Supabase integration
+export const getDashboardStats = async () => {
+  if (await useSupabase()) {
+    return getSupabaseDashboardStats();
+  }
+  
+  const contacts = await getContactMessages();
+  const joinUs = await getJoinUsApplications();
+  const users = await getStoredUsers();
 
   const recentActivity = [
     ...contacts.slice(-5).map((contact) => ({

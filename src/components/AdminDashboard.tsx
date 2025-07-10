@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { getDashboardStats } from "../utils/storage";
+import SupabaseStatus from "./SupabaseStatus";
 import { getAnalytics, exportAnalytics } from "../utils/analytics";
 import { DashboardStats } from "../types/admin";
 
@@ -39,8 +40,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onSectionChange }) => {
     loadStats();
   }, []);
 
-  const loadStats = () => {
-    const dashboardStats = getDashboardStats();
+  const loadStats = async () => {
+    const dashboardStats = await getDashboardStats();
     const analyticsData = getAnalytics();
     setStats(dashboardStats);
     setAnalytics(analyticsData);
@@ -141,6 +142,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onSectionChange }) => {
 
   return (
     <div className="space-y-6">
+      {/* Supabase Status */}
+      <SupabaseStatus />
+
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-2xl p-8 text-black">
         <div className="flex items-center justify-between">
