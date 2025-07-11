@@ -14,9 +14,9 @@ export const useNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const generateNotifications = () => {
-    const contacts = getContactMessages();
-    const joinUs = getJoinUsApplications();
+  const generateNotifications = async () => {
+    const contacts = await getContactMessages();
+    const joinUs = await getJoinUsApplications();
 
     const newNotifications: Notification[] = [];
 

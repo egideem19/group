@@ -21,9 +21,9 @@ interface StatusStats {
   total: number;
 }
 
-export const getAnalytics = () => {
-  const contacts = getContactMessages();
-  const joinUs = getJoinUsApplications();
+export const getAnalytics = async () => {
+  const contacts = await getContactMessages();
+  const joinUs = await getJoinUsApplications();
 
   // Stats par statut pour les contacts
   const contactStats: StatusStats = {

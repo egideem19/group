@@ -131,14 +131,13 @@ export const getUserByCredentials = async (
       .select('*')
       .eq('username', username)
       .eq('password', password)
-      .eq('is_active', true)
-      .single();
+      .eq('is_active', true);
 
-    if (error || !data) {
+    if (error || !data || data.length === 0) {
       return null;
     }
 
-    return convertSupabaseUser(data);
+    return convertSupabaseUser(data[0]);
   } catch (error) {
     console.error('Erreur lors de l\'authentification:', error);
     return null;

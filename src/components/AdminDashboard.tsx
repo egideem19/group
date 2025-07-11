@@ -42,7 +42,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onSectionChange }) => {
 
   const loadStats = async () => {
     const dashboardStats = await getDashboardStats();
-    const analyticsData = getAnalytics();
+    const analyticsData = await getAnalytics();
     setStats(dashboardStats);
     setAnalytics(analyticsData);
   };
